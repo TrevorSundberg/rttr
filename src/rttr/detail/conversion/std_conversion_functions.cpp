@@ -36,6 +36,14 @@
 #include <climits>
 #include <iomanip>
 
+#ifdef RTTR_NO_EXCEPTIONS
+#define RTTR_TRY if (true)
+#define RTTR_CATCH if (false)
+#else
+#define RTTR_TRY try
+#define RTTR_CATCH catch (...)
+#endif
+
 namespace rttr
 {
 namespace detail
@@ -45,14 +53,14 @@ namespace detail
 template<typename T>
 std::string to_string_impl(T value, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::string text = std::to_string(value);
         if (ok)
             *ok = true;
         return text;
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
@@ -106,7 +114,7 @@ std::string to_string(unsigned long long value, bool* ok)
 
 std::string to_string(float value, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::stringstream ss;
         ss << std::setprecision(std::numeric_limits<float>::digits10) << value;
@@ -114,7 +122,7 @@ std::string to_string(float value, bool* ok)
             *ok = true;
         return ss.str();
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
@@ -126,7 +134,7 @@ std::string to_string(float value, bool* ok)
 
 std::string to_string(double value, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::stringstream ss;
         ss << std::setprecision(std::numeric_limits<double>::digits10) << value;
@@ -134,7 +142,7 @@ std::string to_string(double value, bool* ok)
             *ok = true;
         return ss.str();
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
@@ -168,7 +176,7 @@ bool string_to_bool(std::string text, bool* ok)
 
 int string_to_int(const std::string& source, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::size_t pos = 0;
         const int value = std::stoi(source, &pos);
@@ -179,7 +187,7 @@ int string_to_int(const std::string& source, bool* ok)
             return value;
         }
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
@@ -195,7 +203,7 @@ int string_to_int(const std::string& source, bool* ok)
 
 unsigned long string_to_ulong(const std::string& source, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::size_t pos = 0;
         const long long value = std::stoll(source, &pos);
@@ -207,7 +215,7 @@ unsigned long string_to_ulong(const std::string& source, bool* ok)
             return result;
         }
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
@@ -223,7 +231,7 @@ unsigned long string_to_ulong(const std::string& source, bool* ok)
 
 long long string_to_long_long(const std::string& source, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::size_t pos = 0;
         const long long value = std::stoll(source, &pos);
@@ -234,7 +242,7 @@ long long string_to_long_long(const std::string& source, bool* ok)
             return value;
         }
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
@@ -250,7 +258,7 @@ long long string_to_long_long(const std::string& source, bool* ok)
 
 unsigned long long string_to_ulong_long(const std::string& source, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::size_t pos = 0;
         const auto itr = std::find_if(source.begin(), source.end(), [](char c){ return !std::isdigit(c, std::locale()); });
@@ -265,7 +273,7 @@ unsigned long long string_to_ulong_long(const std::string& source, bool* ok)
             }
         }
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
@@ -281,7 +289,7 @@ unsigned long long string_to_ulong_long(const std::string& source, bool* ok)
 
 float string_to_float(const std::string& source, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::size_t pos = 0;
         const float value = std::stof(source, &pos);
@@ -292,7 +300,7 @@ float string_to_float(const std::string& source, bool* ok)
             return value;
         }
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
@@ -308,7 +316,7 @@ float string_to_float(const std::string& source, bool* ok)
 
 double string_to_double(const std::string& source, bool* ok)
 {
-    try
+    RTTR_TRY
     {
         std::size_t pos = 0;
         const double value = std::stod(source, &pos);
@@ -319,7 +327,7 @@ double string_to_double(const std::string& source, bool* ok)
             return value;
         }
     }
-    catch (...)
+    RTTR_CATCH
     {
         if (ok)
             *ok = false;
