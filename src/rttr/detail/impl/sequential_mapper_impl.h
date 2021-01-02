@@ -179,7 +179,7 @@ struct sequential_container_mapper_wrapper : iterator_wrapper_base<Tp>
     template<typename..., typename C = ConstType, enable_if_t<!std::is_const<C>::value, int> = 0>
     static void insert(void* container, argument& value, const iterator_data& itr_pos, iterator_data& itr)
     {
-        if (value.get_type() == ::rttr::type::get<value_t>())
+        if (::rttr::type::get<value_t>().is_base_of(value.get_type()))
         {
             auto ret = base_class::insert(get_container(container), value.get_value<value_t>(), itr_wrapper::get_iterator(itr_pos));
             itr_wrapper::create(itr, ret);
@@ -204,7 +204,7 @@ struct sequential_container_mapper_wrapper : iterator_wrapper_base<Tp>
                          !std::is_const<remove_reference_t<ReturnType>>::value, int> = 0>
     static bool set_value(void* container, std::size_t index, argument& value)
     {
-        if (value.get_type() == ::rttr::type::get<value_t>())
+        if (::rttr::type::get<value_t>().is_base_of(value.get_type()))
         {
             base_class::get_value(get_container(container), index) = value.get_value<value_t>();
             return true;
@@ -221,7 +221,7 @@ struct sequential_container_mapper_wrapper : iterator_wrapper_base<Tp>
                          !std::is_const<remove_reference_t<ReturnType>>::value, int> = 0>
     static bool set_value(void* container, std::size_t index, argument& value)
     {
-        if (value.get_type() == ::rttr::type::get<value_t>())
+        if (::rttr::type::get<value_t>().is_base_of(value.get_type()))
         {
             copy_array(value.get_value<value_t>(), base_class::get_value(get_container(container), index));
             return true;

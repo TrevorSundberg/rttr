@@ -199,7 +199,7 @@ struct associative_container_mapper_wrapper : iterator_wrapper_base<Tp>
     static bool insert_key_value(void* container, argument& key, argument& value, iterator_data& itr)
     {
         if (key.get_type() == ::rttr::type::get<key_t>() &&
-            value.get_type() == ::rttr::type::get<value_t>())
+            ::rttr::type::get<value_t>().is_base_of(value.get_type()))
         {
             auto ret = base_class::insert_key_value(get_container(container), key.get_value<key_t>(), value.get_value<value_t>());
             itr_wrapper::create(itr, ret.first);
